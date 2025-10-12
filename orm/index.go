@@ -14,6 +14,7 @@ type (
 	}
 	DataMethod[T any] interface {
 		Find(filter Filter) ([]T, error)
+		FindOne(filter Filter) (*T, error)
 		FindAndCount(filter Filter) ([]T, int64, error)
 		Count(filter Filter) (int64, error)
 		CreateOne(*T) (*T, error)

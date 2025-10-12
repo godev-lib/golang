@@ -1,7 +1,5 @@
 package orm
 
-import "strings"
-
 func (o *dataModel[T]) Count(filter Filter) (int64, error) {
 	var count int64
 	query := o.db.Model(o.model)
@@ -10,19 +8,12 @@ func (o *dataModel[T]) Count(filter Filter) (int64, error) {
 		query = query.Unscoped()
 	}
 
-	listFields := []string{}
-	args := []interface{}{}
-	for _, item := range filter.Conditions {
-		listFields = append(listFields, item.Query)
-		args = append(args, item.Arg)
-	}
-
-	queryWhere := strings.Join(listFields, string(filter.OperatorCondition))
-	query = query.Where(queryWhere, args...)
+	query = query.Where(queryBuilder(filter))
 
 	err := query.Count(&count).Error
 	if err != nil {
 		return 0, err
 	}
+
 	return count, nil
 }

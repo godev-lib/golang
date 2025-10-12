@@ -2,7 +2,6 @@ package orm
 
 import (
 	"reflect"
-	"strings"
 )
 
 func (o *dataModel[T]) Find(filter Filter) ([]T, error) {
@@ -13,15 +12,7 @@ func (o *dataModel[T]) Find(filter Filter) ([]T, error) {
 		query = query.Unscoped()
 	}
 
-	listFields := []string{}
-	args := []interface{}{}
-	for _, item := range filter.Conditions {
-		listFields = append(listFields, item.Query)
-		args = append(args, item.Arg)
-	}
-
-	queryWhere := strings.Join(listFields, string(filter.OperatorCondition))
-	query = query.Where(queryWhere, args...)
+	query = query.Where(queryBuilder(filter))
 
 	query = query.
 		Limit(filter.Limit).
