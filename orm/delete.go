@@ -1,13 +1,13 @@
 package orm
 
 import (
-	"context"
+	"reflect"
 	"strings"
 )
 
 func (o *dataModel[T]) Delete(filter Filter) error {
-	ctx := context.Background()
 	query := o.db.Model(o.model)
+	dataRuntime := reflect.New(o.dataType).Interface()
 
 	listConds := []string{}
 	args := []interface{}{}
@@ -22,7 +22,7 @@ func (o *dataModel[T]) Delete(filter Filter) error {
 		query = query.Unscoped()
 	}
 
-	err := query.Delete(ctx).Error
+	err := query.Delete(dataRuntime).Error
 	if err != nil {
 		return err
 	}

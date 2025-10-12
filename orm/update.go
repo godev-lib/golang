@@ -10,7 +10,7 @@ func (o *dataModel[T]) Update(data *T, filter Filter) (*T, error) {
 
 	query = query.Where(queryBuilder(filter))
 
-	err := query.Updates(&dataRuntime).Error
+	err := query.Updates(dataRuntime).Error
 	if err != nil {
 		return nil, err
 	}
