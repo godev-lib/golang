@@ -7,14 +7,15 @@ const (
 	OR  OPERATOR = "OR"
 )
 
-type FindFilter struct {
+type Filter struct {
 	Limit             int
 	Offset            int
 	OperatorCondition OPERATOR
-	Conditions        []FindCondition
+	Conditions        []Condition
+	Unscoped          bool
 }
 
-type FindCondition struct {
+type Condition struct {
 	Query string
 	Arg   interface{}
 }

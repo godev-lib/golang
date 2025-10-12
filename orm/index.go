@@ -8,32 +8,29 @@ import (
 
 type (
 	dataModel[T any] struct {
-		db               *gorm.DB
-		modelRuntime     interface{}
-		dataType         reflect.Type
-		dataRuntime      reflect.Value
-		sliceDataRuntime reflect.Value
+		db       *gorm.DB
+		dataType reflect.Type
+		model    any
 	}
 	DataMethod[T any] interface {
-		Find(filter FindFilter) ([]T, error)
-		FindAndCount(filter FindFilter) ([]T, int64, error)
-		Count(filter FindFilter) (int64, error)
+		Find(filter Filter) ([]T, error)
+		FindAndCount(filter Filter) ([]T, int64, error)
+		Count(filter Filter) (int64, error)
+		CreateOne(*T) (*T, error)
+		CreateMany([]*T) ([]*T, error)
+		CreateInBatch(data []*T, size int) ([]*T, error)
+		Update(data *T, filter Filter) (*T, error)
+		Delete(filter Filter) error
 	}
 )
 
 func NewOrm[T any](db *gorm.DB) DataMethod[T] {
-	var dataType T
-	dataTypeRuntime := reflect.TypeOf(dataType)
-
-	modelRuntime := reflect.New(dataTypeRuntime).Interface()
-	dataRuntime := reflect.New(dataTypeRuntime)
-	sliceDataRuntime := reflect.New(reflect.SliceOf(dataTypeRuntime))
+	dataType := reflect.TypeFor[T]()
+	model := reflect.New(dataType).Interface()
 
 	return &dataModel[T]{
-		db:               db,
-		modelRuntime:     modelRuntime,
-		dataType:         dataTypeRuntime,
-		dataRuntime:      dataRuntime,
-		sliceDataRuntime: sliceDataRuntime,
+		db:       db,
+		dataType: dataType,
+		model:    model,
 	}
 }

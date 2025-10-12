@@ -2,7 +2,7 @@ package orm
 
 import "errors"
 
-func (o *dataModel[T]) FindAndCount(filter FindFilter) ([]T, int64, error) {
+func (o *dataModel[T]) FindAndCount(filter Filter) ([]T, int64, error) {
 	var chanList, chanCount = make(chan []T, 1), make(chan int64, 1)
 	var chanErrList, chanErrCount = make(chan error, 1), make(chan error, 1)
 

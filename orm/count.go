@@ -2,9 +2,13 @@ package orm
 
 import "strings"
 
-func (o *dataModel[T]) Count(filter FindFilter) (int64, error) {
+func (o *dataModel[T]) Count(filter Filter) (int64, error) {
 	var count int64
-	query := o.db.Model(o.modelRuntime)
+	query := o.db.Model(o.model)
+
+	if filter.Unscoped {
+		query = query.Unscoped()
+	}
 
 	listFields := []string{}
 	args := []interface{}{}

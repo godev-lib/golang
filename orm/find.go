@@ -1,10 +1,17 @@
 package orm
 
-import "strings"
+import (
+	"reflect"
+	"strings"
+)
 
-func (o *dataModel[T]) Find(filter FindFilter) ([]T, error) {
-	datas := o.sliceDataRuntime
-	query := o.db.Model(o.modelRuntime)
+func (o *dataModel[T]) Find(filter Filter) ([]T, error) {
+	datas := reflect.New(reflect.SliceOf(o.dataType))
+	query := o.db.Model(o.model)
+
+	if filter.Unscoped {
+		query = query.Unscoped()
+	}
 
 	listFields := []string{}
 	args := []interface{}{}
