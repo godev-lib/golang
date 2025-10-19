@@ -13,6 +13,7 @@ type Filter struct {
 	Limit             int
 	Offset            int
 	OperatorCondition OPERATOR
+	IsReturning       bool
 	Conditions        []Condition
 	Unscoped          bool
 }

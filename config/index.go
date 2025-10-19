@@ -9,7 +9,9 @@ import (
 type Config struct {
 	App      AppConfig      `mapstructure:"app"`
 	Database DatabaseConfig `mapstructure:"database"`
+	Pusher   PusherConfig   `mapstructure:"pusher"`
 	JwtKey   string         `mapstructure:"jwt-key"`
+	Minio    MinioConfig    `mapstructure:"minio"`
 }
 
 type AppConfig struct {
@@ -25,6 +27,25 @@ type DatabaseConfig struct {
 	Username string `mapstructure:"username"`
 	Password string `mapstructure:"password"`
 	Name     string `mapstructure:"name"`
+}
+
+type PusherConfig struct {
+	AppID                       string `mapstructure:"app_id"`
+	Key                         string `mapstructure:"key"`
+	Secret                      string `mapstructure:"secret"`
+	Host                        string `mapstructure:"host"`
+	Secure                      bool   `mapstructure:"secure"`
+	Cluster                     string `mapstructure:"cluster"`
+	EncryptionMasterKey         string `mapstructure:"encryption_master_key"`
+	EncryptionMasterKeyBase64   string `mapstructure:"encryption_master_key_base64"`
+	OverrideMaxMessagePayloadKB int    `mapstructure:"override_max_message_payload_kb"`
+}
+
+type MinioConfig struct {
+	Endpoint        string `mapstructure:"endpoint"`
+	AccessKeyID     string `mapstructure:"access_key_id"`
+	SecretAccessKey string `mapstructure:"secret_access_key"`
+	UseSSL          bool   `mapstructure:"use_ssl"`
 }
 
 func NewConfig() *Config {

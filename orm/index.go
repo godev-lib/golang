@@ -13,6 +13,7 @@ type (
 		model    any
 	}
 	DataMethod[T any] interface {
+		GetDB() *gorm.DB
 		Find(filter Filter) ([]T, error)
 		FindOne(filter Filter) (*T, error)
 		FindAndCount(filter Filter) ([]T, int64, error)

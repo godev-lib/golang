@@ -8,7 +8,9 @@ func (o *dataModel[T]) Count(filter Filter) (int64, error) {
 		query = query.Unscoped()
 	}
 
-	query = query.Where(queryBuilder(filter))
+	if len(filter.Conditions) > 0 {
+		query = query.Where(queryBuilder(filter))
+	}
 
 	err := query.Count(&count).Error
 	if err != nil {

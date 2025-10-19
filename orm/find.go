@@ -12,7 +12,9 @@ func (o *dataModel[T]) Find(filter Filter) ([]T, error) {
 		query = query.Unscoped()
 	}
 
-	query = query.Where(queryBuilder(filter))
+	if len(filter.Conditions) > 0 {
+		query = query.Where(queryBuilder(filter))
+	}
 
 	query = query.
 		Limit(filter.Limit).
